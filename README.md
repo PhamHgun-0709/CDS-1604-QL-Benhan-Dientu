@@ -65,56 +65,56 @@ Hệ thống quản lý bệnh án điện tử là một ứng dụng web toàn
 ### Trang chủ
 
 <p align="center">
-  <img src="docs/Home.png" alt="Server" width="600"/>
+  <img src="docs/Home.png" alt="Home" width="600"/>
 </p>
 
 ### Đăng nhập
 
 <p align="center">
-  <img src="docs/Login.png" alt="Server" width="600"/>
+  <img src="docs/Login.png" alt="Login" width="600"/>
 </p>
 
 ### Đăng ký
 
 <p align="center">
-  <img src="docs/Resgiter.png" alt="Server" width="600"/>
+  <img src="docs/Resgiter.png" alt="Resgiter" width="600"/>
 </p>
 
 ### Quản lý người dùng 
 
 <p align="center">
-  <img src="docs/User.png" alt="Server" width="600"/>
+  <img src="docs/User.png" alt="User" width="600"/>
 </p>
 
 ### Thêm hồ sơ bệnh nhân
 
 <p align="center">
-  <img src="docs/Hoso.png" alt="Server" width="600"/>
+  <img src="docs/Hoso.png" alt="Hoso" width="600"/>
 </p>
 
 ### Dashboard Analytics
 
 <p align="center">
-  <img src="docs/Dashboard.png" alt="Server" width="600"/>
+  <img src="docs/Dashboard.png" alt="Dashboard" width="600"/>
 </p>
 
 ### Profile & Settings
 1. Admin
 
 <p align="center">
-  <img src="docs/Admin.png" alt="Server" width="600"/>
+  <img src="docs/Admin.png" alt="Admin" width="600"/>
 </p>
 
 2. Doctor
 
 <p align="center">
-  <img src="docs/Doctor.png" alt="Server" width="600"/>
+  <img src="docs/Doctor.png" alt="Doctor" width="600"/>
 </p>
 
 3. Patients
 
 <p align="center">
-  <img src="docs/Patien.png" alt="Server" width="600"/>
+  <img src="docs/Patient.png" alt="Patient" width="600"/>
 </p>
 
 ---
