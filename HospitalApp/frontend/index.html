@@ -1,0 +1,246 @@
+﻿<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Trang Chủ - Hệ Thống Quản Lý Bệnh Viện</title>
+    <link rel="stylesheet" href="style.css?v=3.3" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="topbar">
+        <h1>Quản Lý Bệnh Viện</h1>
+        <div class="top-actions">
+          <nav class="navlinks">
+            <a href="index.html" class="active">🏠 Trang Chủ</a>
+            <a href="add-patient.html" id="nav-add-patient" style="display:none">➕ Thêm Hồ Sơ Bệnh Nhân</a>
+            <!-- Patient role sẽ redirect về profile, Admin/Doctor về index.html -->
+            <a href="admin-dashboard.html" id="nav-dashboard" style="display:none">📊 Dashboard</a>
+            <a href="admin-users.html" id="nav-admin" style="display:none">👥 Quản Lý Users</a>
+          </nav>
+          <div class="userbar">
+            <a href="profile.html" id="profileLink" class="btn-profile" style="display:none;">
+              <span class="icon">👤</span>
+              <span>Hồ Sơ</span>
+            </a>
+            <span id="currentUser" class="user-info">Chưa đăng nhập</span>
+            <button id="logoutBtn" class="danger" style="display:none">Đăng Xuất</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <div class="hero-content">
+          <!-- Hiển thị khi CHƯA đăng nhập -->
+          <div class="hero-welcome" id="heroWelcomeGuest">
+            <h2>Chào mừng đến với Hệ thống Quản lý Bệnh viện</h2>
+            <p>Quản lý thông tin bệnh nhân, hồ sơ y tế, đơn thuốc và kết quả xét nghiệm một cách hiệu quả</p>
+            <div class="hero-actions">
+              <a href="login.html" class="btn-hero primary">🔐 Đăng Nhập</a>
+              <a href="register.html" class="btn-hero secondary">📝 Đăng Ký</a>
+            </div>
+          </div>
+          
+          <!-- Hiển thị khi ĐÃ đăng nhập -->
+          <div class="hero-welcome" id="heroWelcomeUser" style="display:none">
+            <h2>Chào mừng trở lại! <span id="heroUserName"></span></h2>
+            <p id="heroUserMessage">Hệ thống sẵn sàng hỗ trợ bạn quản lý thông tin bệnh nhân</p>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-number" id="totalPatients">0</div>
+            <div class="stat-label">Bệnh Nhân</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-number" id="totalRecords">0</div>
+            <div class="stat-label">Hồ Sơ</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">💊</div>
+            <div class="stat-number" id="totalPrescriptions">0</div>
+            <div class="stat-label">Đơn Thuốc</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🔬</div>
+            <div class="stat-number" id="totalLabs">0</div>
+            <div class="stat-label">Xét Nghiệm</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-grid">
+        <!-- Main Content -->
+        <div class="main-content">
+        </div>
+      </div>
+
+      <!-- Patient List & Details Section - Full Width -->
+      <div class="patient-section">
+        <section class="patient-list-section">
+          <div class="section-header">
+            <h2>👥 Danh Sách Bệnh Nhân</h2>
+            <button id="refresh" class="btn-icon secondary">🔄 Tải Lại</button>
+          </div>
+          
+          <!-- Search & Filter -->
+          <div class="search-filter-bar">
+            <div class="search-box">
+              <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm theo tên, SĐT, email...">
+            </div>
+            <div class="filter-group">
+              <select id="filterGender">
+                <option value="">Tất cả giới tính</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+                <option value="Khác">Khác</option>
+              </select>
+              <select id="filterBloodType">
+                <option value="">Tất cả nhóm máu</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="AB">AB</option>
+                <option value="O">O</option>
+              </select>
+            </div>
+          </div>
+          
+          <ul id="patientList" class="patient-list"></ul>
+        </section>
+
+        <section class="patient-detail-section">
+          <div class="section-header">
+            <h2>📋 Chi Tiết Bệnh Nhân</h2>
+            <button id="btnAddRecord" class="btn-icon secondary" style="display:none">➕ Thêm Hồ Sơ</button>
+          </div>
+          <div id="detailContent" class="detail-placeholder">
+            <div class="placeholder-icon">👈</div>
+            <p>Chọn một bệnh nhân từ danh sách để xem chi tiết hồ sơ, đơn thuốc và kết quả xét nghiệm</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>&copy; 2025 Hệ Thống Quản Lý Bệnh Viện. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <!-- Modal: Thêm Hồ Sơ Bệnh Án -->
+    <div id="modalAddRecord" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>📋 Thêm Hồ Sơ Bệnh Án</h2>
+          <span class="modal-close">&times;</span>
+        </div>
+        <form id="formAddRecord" class="modal-form">
+          <input type="hidden" id="recordPatientId" name="patient_id">
+          
+          <div class="form-group">
+            <label>Chẩn đoán <span class="required">*</span></label>
+            <textarea id="recordDiagnosis" name="diagnosis" rows="3" required placeholder="Nhập chẩn đoán bệnh..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Điều trị <span class="required">*</span></label>
+            <textarea id="recordTreatment" name="treatment" rows="4" required placeholder="Nhập phương pháp điều trị..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Ngày khám</label>
+            <input type="date" id="recordDate" name="date" value="${new Date().toISOString().split('T')[0]}">
+          </div>
+          
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary modal-cancel">Hủy</button>
+            <button type="submit" class="btn-primary">💾 Lưu Hồ Sơ</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Thêm Đơn Thuốc -->
+    <div id="modalAddPrescription" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>💊 Kê Đơn Thuốc</h2>
+          <span class="modal-close">&times;</span>
+        </div>
+        <form id="formAddPrescription" class="modal-form">
+          <input type="hidden" id="prescriptionPatientId" name="patient_id">
+          
+          <div class="form-group">
+            <label>Tên thuốc <span class="required">*</span></label>
+            <input type="text" id="prescriptionMedicine" name="medicine_name" required placeholder="Ví dụ: Paracetamol">
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Liều lượng <span class="required">*</span></label>
+              <input type="text" id="prescriptionDosage" name="dosage" required placeholder="Ví dụ: 500mg">
+            </div>
+            
+            <div class="form-group">
+              <label>Tần suất</label>
+              <input type="text" id="prescriptionFrequency" name="frequency" placeholder="Ví dụ: 3 lần/ngày">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Thời gian dùng</label>
+            <input type="text" id="prescriptionDuration" name="duration" placeholder="Ví dụ: 7 ngày">
+          </div>
+          
+          <div class="form-group">
+            <label>Ghi chú</label>
+            <textarea id="prescriptionInstructions" name="instructions" rows="2" placeholder="Hướng dẫn sử dụng..."></textarea>
+          </div>
+          
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary modal-cancel">Hủy</button>
+            <button type="submit" class="btn-primary">💾 Lưu Đơn Thuốc</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Thêm Xét Nghiệm -->
+    <div id="modalAddLab" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>🔬 Yêu Cầu Xét Nghiệm</h2>
+          <span class="modal-close">&times;</span>
+        </div>
+        <form id="formAddLab" class="modal-form">
+          <input type="hidden" id="labPatientId" name="patient_id">
+          
+          <div class="form-group">
+            <label>Tên xét nghiệm <span class="required">*</span></label>
+            <input type="text" id="labTestName" name="test_name" required placeholder="Ví dụ: Xét nghiệm máu">
+          </div>
+          
+          <div class="form-group">
+            <label>Kết quả</label>
+            <textarea id="labResult" name="result" rows="3" placeholder="Kết quả xét nghiệm (để trống nếu chưa có)..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Ngày xét nghiệm</label>
+            <input type="date" id="labTestDate" name="test_date" value="${new Date().toISOString().split('T')[0]}">
+          </div>
+          
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary modal-cancel">Hủy</button>
+            <button type="submit" class="btn-primary">💾 Lưu Xét Nghiệm</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="ui-helpers.js"></script>
+    <script type="module" src="main.js?v=3.5"></script>
+  </body>
+</html>

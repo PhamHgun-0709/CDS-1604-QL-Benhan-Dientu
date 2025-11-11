@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Bệnh Nhân - Hospital Management System</title>
+  <link rel="stylesheet" href="style.css?v=3.6">
+  <style>
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .welcome-banner {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .welcome-banner h2 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.75rem;
+    }
+    
+    .welcome-banner p {
+      margin: 0;
+      opacity: 0.9;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      text-align: center;
+    }
+    
+    .stat-card .icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-card .number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0.5rem 0;
+    }
+    
+    .stat-card .label {
+      color: var(--gray-600);
+      font-size: 0.9rem;
+    }
+    
+    .recent-section {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem;
+    }
+    
+    .recent-section h3 {
+      margin: 0 0 1.5rem 0;
+      color: var(--gray-900);
+      border-bottom: 2px solid var(--gray-100);
+      padding-bottom: 0.75rem;
+    }
+    
+    .record-item {
+      background: var(--gray-50);
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.75rem;
+      border-left: 4px solid var(--primary);
+    }
+    
+    .record-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .record-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .record-title {
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+    
+    .record-date {
+      color: var(--gray-500);
+      font-size: 0.875rem;
+    }
+    
+    .record-content {
+      color: var(--gray-700);
+      line-height: 1.5;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--gray-400);
+    }
+    
+    .empty-state .icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <a href="profile.html" class="back-link">← Quay lại Hồ Sơ</a>
+    
+    <div class="welcome-banner">
+      <h2 id="welcomeTitle">Chào mừng!</h2>
+      <p id="welcomeSubtitle">Xem thông tin sức khỏe và lịch sử khám bệnh của bạn</p>
+    </div>
+    
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card">
+        <div class="icon">📋</div>
+        <div class="number" id="recordsCount">-</div>
+        <div class="label">Hồ Sơ Bệnh Án</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="icon">💊</div>
+        <div class="number" id="prescriptionsCount">-</div>
+        <div class="label">Đơn Thuốc</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="icon">🔬</div>
+        <div class="number" id="labsCount">-</div>
+        <div class="label">Xét Nghiệm</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="icon">📅</div>
+        <div class="number" id="lastVisit">-</div>
+        <div class="label">Khám Gần Nhất</div>
+      </div>
+    </div>
+    
+    <div class="recent-section">
+      <h3>📋 Hồ Sơ Bệnh Án Gần Đây</h3>
+      <div id="recentRecords">
+        <div class="empty-state">
+          <div class="icon">⏳</div>
+          <p>Đang tải dữ liệu...</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="recent-section">
+      <h3>💊 Đơn Thuốc Gần Đây</h3>
+      <div id="recentPrescriptions">
+        <div class="empty-state">
+          <div class="icon">⏳</div>
+          <p>Đang tải dữ liệu...</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="recent-section">
+      <h3>🔬 Kết Quả Xét Nghiệm Gần Đây</h3>
+      <div id="recentLabs">
+        <div class="empty-state">
+          <div class="icon">⏳</div>
+          <p>Đang tải dữ liệu...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getToken, getRole } from './auth.js';
+    
+    let currentUser = null;
+    let myPatient = null;
+    
+    async function loadDashboard() {
+      try {
+        // Load user info
+        const userRes = await fetch('http://localhost:3000/api/users/me', {
+          headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        
+        if (!userRes.ok) {
+          window.location.href = 'login.html';
+          return;
+        }
+        
+        currentUser = await userRes.json();
+        
+        // Only allow user role
+        if (currentUser.role !== 'user') {
+          window.location.href = 'index.html';
+          return;
+        }
+        
+        document.getElementById('welcomeTitle').textContent = `Chào ${currentUser.full_name || currentUser.username}!`;
+        
+        // Find patient record
+        const patientsRes = await fetch('http://localhost:3000/api/patients', {
+          headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        
+        const patients = await patientsRes.json();
+        myPatient = patients.find(p => 
+          p.email === currentUser.email || 
+          p.phone === currentUser.phone ||
+          p.name === currentUser.full_name
+        ) || patients[0];
+        
+        if (!myPatient) {
+          showEmptyState();
+          return;
+        }
+        
+        // Load medical data
+        await loadMedicalData();
+        
+      } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Có lỗi khi tải dữ liệu');
+      }
+    }
+    
+    async function loadMedicalData() {
+      const [recordsRes, prescriptionsRes, labsRes] = await Promise.all([
+        fetch(`http://localhost:3000/api/records?patient_id=${myPatient.id}`, {
+          headers: { 'Authorization': `Bearer ${getToken()}` }
+        }),
+        fetch(`http://localhost:3000/api/prescriptions?patient_id=${myPatient.id}`, {
+          headers: { 'Authorization': `Bearer ${getToken()}` }
+        }),
+        fetch(`http://localhost:3000/api/labs?patient_id=${myPatient.id}`, {
+          headers: { 'Authorization': `Bearer ${getToken()}` }
+        })
+      ]);
+      
+      const records = await recordsRes.json();
+      const prescriptions = await prescriptionsRes.json();
+      const labs = await labsRes.json();
+      
+      // Update stats
+      document.getElementById('recordsCount').textContent = records.length;
+      document.getElementById('prescriptionsCount').textContent = prescriptions.length;
+      document.getElementById('labsCount').textContent = labs.length;
+      
+      // Last visit
+      if (records.length > 0) {
+        const lastRecord = records[0];
+        const lastDate = new Date(lastRecord.created_at);
+        document.getElementById('lastVisit').textContent = lastDate.toLocaleDateString('vi-VN');
+      } else {
+        document.getElementById('lastVisit').textContent = 'Chưa có';
+      }
+      
+      // Render recent data
+      renderRecords(records.slice(0, 5));
+      renderPrescriptions(prescriptions.slice(0, 5));
+      renderLabs(labs.slice(0, 5));
+    }
+    
+    function renderRecords(records) {
+      const container = document.getElementById('recentRecords');
+      
+      if (records.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">📋</div>
+            <p>Chưa có hồ sơ bệnh án</p>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = records.map(r => `
+        <div class="record-item">
+          <div class="record-header">
+            <div class="record-title">Chẩn đoán</div>
+            <div class="record-date">${new Date(r.created_at).toLocaleDateString('vi-VN')}</div>
+          </div>
+          <div class="record-content">${r.diagnosis}</div>
+          ${r.treatment ? `<div class="record-content" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--gray-200);"><strong>Điều trị:</strong> ${r.treatment}</div>` : ''}
+        </div>
+      `).join('');
+    }
+    
+    function renderPrescriptions(prescriptions) {
+      const container = document.getElementById('recentPrescriptions');
+      
+      if (prescriptions.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">💊</div>
+            <p>Chưa có đơn thuốc</p>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = prescriptions.map(p => `
+        <div class="record-item" style="border-left-color: var(--secondary);">
+          <div class="record-header">
+            <div class="record-title">${p.medicine_name}</div>
+            <div class="record-date">${new Date(p.created_at).toLocaleDateString('vi-VN')}</div>
+          </div>
+          <div class="record-content">
+            <strong>Liều lượng:</strong> ${p.dosage}<br>
+            ${p.frequency ? `<strong>Tần suất:</strong> ${p.frequency}<br>` : ''}
+            ${p.duration ? `<strong>Thời gian:</strong> ${p.duration}` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function renderLabs(labs) {
+      const container = document.getElementById('recentLabs');
+      
+      if (labs.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">🔬</div>
+            <p>Chưa có kết quả xét nghiệm</p>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = labs.map(l => `
+        <div class="record-item" style="border-left-color: var(--success);">
+          <div class="record-header">
+            <div class="record-title">${l.test_name}</div>
+            <div class="record-date">${new Date(l.test_date).toLocaleDateString('vi-VN')}</div>
+          </div>
+          <div class="record-content">
+            <strong>Kết quả:</strong> ${l.result || 'Chưa có'}<br>
+            ${l.notes ? `<span style="color: var(--gray-600);">${l.notes}</span>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function showEmptyState() {
+      document.getElementById('recordsCount').textContent = '0';
+      document.getElementById('prescriptionsCount').textContent = '0';
+      document.getElementById('labsCount').textContent = '0';
+      document.getElementById('lastVisit').textContent = 'N/A';
+      
+      const emptyHTML = `
+        <div class="empty-state">
+          <div class="icon">📋</div>
+          <p>Bạn chưa có hồ sơ bệnh nhân</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem;">Vui lòng liên hệ bác sĩ để tạo hồ sơ</p>
+        </div>
+      `;
+      
+      document.getElementById('recentRecords').innerHTML = emptyHTML;
+      document.getElementById('recentPrescriptions').innerHTML = emptyHTML;
+      document.getElementById('recentLabs').innerHTML = emptyHTML;
+    }
+    
+    // Load on page load
+    loadDashboard();
+  </script>
+</body>
+</html>

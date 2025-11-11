@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Người Dùng - Hospital Management System</title>
+  <link rel="stylesheet" href="style.css?v=3.5">
+  <style>
+    .admin-container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .admin-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--gray-200);
+    }
+    
+    .admin-header h1 {
+      margin: 0 0 0.5rem 0;
+      color: var(--gray-900);
+    }
+    
+    .admin-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .users-table-container {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+    
+    .users-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .users-table thead {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+    }
+    
+    .users-table th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    
+    .users-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    
+    .users-table tbody tr:hover {
+      background: var(--gray-50);
+    }
+    
+    .role-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    
+    .role-badge.admin {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    
+    .role-badge.doctor {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .role-badge.user {
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 0.875rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-edit {
+      background: var(--info);
+      color: white;
+    }
+    
+    .btn-delete {
+      background: var(--danger);
+      color: white;
+    }
+    
+    .btn-small:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <a href="index.html" class="back-link">← Quay lại Trang Chủ</a>
+    
+    <div class="admin-header">
+      <h1>👥 Quản Lý Người Dùng</h1>
+      <p style="color: var(--gray-600); margin: 0;">Quản lý tài khoản và phân quyền người dùng trong hệ thống</p>
+    </div>
+    
+    <div class="admin-actions">
+      <button id="btnAddUser" class="btn-primary">➕ Thêm Người Dùng</button>
+      <button id="btnRefresh" class="btn-secondary">🔄 Tải Lại</button>
+    </div>
+    
+    <div class="users-table-container">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Họ Tên</th>
+            <th>Email</th>
+            <th>Số Điện Thoại</th>
+            <th>Vai Trò</th>
+            <th>Ngày Tạo</th>
+            <th>Thao Tác</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody">
+          <tr>
+            <td colspan="8" class="empty-state">⏳ Đang tải dữ liệu...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal Add/Edit User -->
+  <div id="modalUser" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">➕ Thêm Người Dùng</h2>
+        <span class="modal-close">&times;</span>
+      </div>
+      
+      <form id="formUser" class="modal-form">
+        <input type="hidden" id="userId" name="id">
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label>Username <span class="required">*</span></label>
+            <input type="text" id="userUsername" name="username" required placeholder="vd: nguyenvana">
+          </div>
+          
+          <div class="form-group">
+            <label>Họ Tên</label>
+            <input type="text" id="userFullName" name="full_name" placeholder="vd: Nguyễn Văn A">
+          </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="userEmail" name="email" placeholder="vd: user@gmail.com">
+          </div>
+          
+          <div class="form-group">
+            <label>Số Điện Thoại</label>
+            <input type="tel" id="userPhone" name="phone" placeholder="vd: 0901234567">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Địa Chỉ</label>
+          <textarea id="userAddress" name="address" rows="2" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành"></textarea>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label>Ngày Sinh</label>
+            <input type="date" id="userDob" name="date_of_birth">
+          </div>
+          
+          <div class="form-group">
+            <label>Giới Tính</label>
+            <select id="userGender" name="gender">
+              <option value="">-- Chọn --</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Mật khẩu <span id="passwordRequired" class="required">*</span></label>
+          <input type="password" id="userPassword" name="password" placeholder="Tối thiểu 6 ký tự">
+          <small style="color: var(--gray-500);">Để trống nếu không muốn thay đổi (khi sửa)</small>
+        </div>
+        
+        <div class="form-group">
+          <label>Vai Trò <span class="required">*</span></label>
+          <select id="userRole" name="role" required>
+            <option value="user">👤 User (Bệnh nhân)</option>
+            <option value="doctor">👨‍⚕️ Doctor (Bác sĩ)</option>
+            <option value="admin">👑 Admin (Quản trị viên)</option>
+          </select>
+        </div>
+        
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary modal-cancel">Hủy</button>
+          <button type="submit" class="btn-primary">💾 Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getToken } from './auth.js';
+    
+    let users = [];
+    let editingUserId = null;
+    
+    // Load users
+    async function loadUsers() {
+      try {
+        const response = await fetch('http://localhost:3000/api/users', {
+          headers: {
+            'Authorization': `Bearer ${getToken()}`
+          }
+        });
+        
+        if (!response.ok) throw new Error('Failed to fetch users');
+        
+        users = await response.json();
+        renderUsers();
+      } catch (error) {
+        console.error('Error loading users:', error);
+        document.getElementById('usersTableBody').innerHTML = `
+          <tr><td colspan="6" class="empty-state">❌ Không thể tải dữ liệu</td></tr>
+        `;
+      }
+    }
+    
+    // Render users table
+    function renderUsers() {
+      const tbody = document.getElementById('usersTableBody');
+      
+      if (!users || users.length === 0) {
+        tbody.innerHTML = `
+          <tr><td colspan="8" class="empty-state">Chưa có người dùng nào</td></tr>
+        `;
+        return;
+      }
+      
+      tbody.innerHTML = users.map(user => `
+        <tr>
+          <td><strong>#${user.id}</strong></td>
+          <td><strong>${user.username}</strong></td>
+          <td>${user.full_name || '<em style="color: var(--gray-400);">Chưa có</em>'}</td>
+          <td>${user.email || '<em style="color: var(--gray-400);">Chưa có</em>'}</td>
+          <td>${user.phone || '<em style="color: var(--gray-400);">Chưa có</em>'}</td>
+          <td><span class="role-badge ${user.role}">${getRoleText(user.role)}</span></td>
+          <td>${user.created_at ? new Date(user.created_at).toLocaleString('vi-VN') : 'N/A'}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-small btn-edit" onclick="editUser(${user.id})">✏️ Sửa</button>
+              <button class="btn-small btn-delete" onclick="deleteUser(${user.id})">🗑️ Xóa</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+    
+    function getRoleText(role) {
+      const roleMap = {
+        'admin': '👑 Admin',
+        'doctor': '👨‍⚕️ Doctor',
+        'user': '👤 User'
+      };
+      return roleMap[role] || role;
+    }
+    
+    // Modal functions
+    const modal = document.getElementById('modalUser');
+    const btnAddUser = document.getElementById('btnAddUser');
+    const btnRefresh = document.getElementById('btnRefresh');
+    const closeBtn = modal.querySelector('.modal-close');
+    const cancelBtn = modal.querySelector('.modal-cancel');
+    const form = document.getElementById('formUser');
+    
+    function showModal() {
+      modal.classList.add('show');
+    }
+    
+    function hideModal() {
+      modal.classList.remove('show');
+      form.reset();
+      editingUserId = null;
+      document.getElementById('modalTitle').textContent = '➕ Thêm Người Dùng';
+      document.getElementById('userPassword').required = true;
+      document.getElementById('passwordRequired').style.display = 'inline';
+    }
+    
+    btnAddUser.addEventListener('click', showModal);
+    btnRefresh.addEventListener('click', loadUsers);
+    closeBtn.addEventListener('click', hideModal);
+    cancelBtn.addEventListener('click', hideModal);
+    
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) hideModal();
+    });
+    
+    // Edit user
+    window.editUser = function(id) {
+      const user = users.find(u => u.id === id);
+      if (!user) return;
+      
+      editingUserId = id;
+      document.getElementById('userId').value = id;
+      document.getElementById('userUsername').value = user.username;
+      document.getElementById('userFullName').value = user.full_name || '';
+      document.getElementById('userEmail').value = user.email || '';
+      document.getElementById('userPhone').value = user.phone || '';
+      document.getElementById('userAddress').value = user.address || '';
+      
+      // Format date_of_birth to YYYY-MM-DD for input[type="date"]
+      if (user.date_of_birth) {
+        const date = new Date(user.date_of_birth);
+        const formattedDate = date.toISOString().split('T')[0];
+        document.getElementById('userDob').value = formattedDate;
+      } else {
+        document.getElementById('userDob').value = '';
+      }
+      
+      document.getElementById('userGender').value = user.gender || '';
+      document.getElementById('userPassword').value = '';
+      document.getElementById('userPassword').required = false;
+      document.getElementById('passwordRequired').style.display = 'none';
+      document.getElementById('userRole').value = user.role;
+      document.getElementById('modalTitle').textContent = '✏️ Sửa Người Dùng';
+      
+      showModal();
+    };
+    
+    // Delete user
+    window.deleteUser = async function(id) {
+      if (!confirm('Bạn có chắc chắn muốn xóa người dùng này?')) return;
+      
+      try {
+        const response = await fetch(`http://localhost:3000/api/users/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${getToken()}`
+          }
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+          alert('✅ ' + result.message);
+          loadUsers();
+        } else {
+          alert('❌ ' + (result.error || 'Có lỗi xảy ra'));
+        }
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        alert('❌ Không thể kết nối đến server');
+      }
+    };
+    
+    // Form submit
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      const data = {
+        username: formData.get('username'),
+        full_name: formData.get('full_name') || null,
+        email: formData.get('email') || null,
+        phone: formData.get('phone') || null,
+        address: formData.get('address') || null,
+        date_of_birth: formData.get('date_of_birth') || null,
+        gender: formData.get('gender') || null,
+        password: formData.get('password') || null,
+        role: formData.get('role')
+      };
+      
+      // Remove null password if editing
+      if (editingUserId && !data.password) {
+        delete data.password;
+      }
+      
+      try {
+        const url = editingUserId 
+          ? `http://localhost:3000/api/users/${editingUserId}`
+          : 'http://localhost:3000/api/users';
+        
+        const method = editingUserId ? 'PUT' : 'POST';
+        
+        const response = await fetch(url, {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getToken()}`
+          },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+          alert('✅ ' + result.message);
+          hideModal();
+          loadUsers();
+        } else {
+          alert('❌ ' + (result.error || 'Có lỗi xảy ra'));
+        }
+      } catch (error) {
+        console.error('Error saving user:', error);
+        alert('❌ Không thể kết nối đến server');
+      }
+    });
+    
+    // Initial load
+    loadUsers();
+  </script>
+</body>
+</html>

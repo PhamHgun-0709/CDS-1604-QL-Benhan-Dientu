@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hồ Sơ Cá Nhân - Hospital Management System</title>
+  <link rel="stylesheet" href="style.css?v=3.6">
+  <style>
+    .profile-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .profile-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      font-size: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .profile-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .profile-card h3 {
+      margin: 0 0 1.5rem 0;
+      color: var(--gray-900);
+      border-bottom: 2px solid var(--gray-100);
+      padding-bottom: 0.75rem;
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .info-item {
+      padding: 1rem;
+      background: var(--gray-50);
+      border-radius: var(--radius-sm);
+    }
+    
+    .info-label {
+      font-size: 0.875rem;
+      color: var(--gray-500);
+      margin-bottom: 0.25rem;
+    }
+    
+    .info-value {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--gray-900);
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <a href="index.html" class="back-link">← Quay lại Trang Chủ</a>
+    
+    <div class="profile-header">
+      <div class="profile-avatar" id="profileAvatar">👤</div>
+      <h1 id="profileUsername">Loading...</h1>
+      <p id="profileRole" style="color: var(--gray-600);"></p>
+    </div>
+    
+    <!-- Thông Tin Cá Nhân -->
+    <div class="profile-card">
+      <h3>👤 Thông Tin Cá Nhân</h3>
+      <div class="info-grid" id="userInfo">
+        <div class="info-item"><div class="info-label">Username</div><div class="info-value">-</div></div>
+        <div class="info-item"><div class="info-label">Email</div><div class="info-value">-</div></div>
+        <div class="info-item"><div class="info-label">Số Điện Thoại</div><div class="info-value">-</div></div>
+        <div class="info-item"><div class="info-label">Ngày Sinh</div><div class="info-value">-</div></div>
+        <div class="info-item"><div class="info-label">Giới Tính</div><div class="info-value">-</div></div>
+        <div class="info-item"><div class="info-label">Địa Chỉ</div><div class="info-value" style="grid-column: 1 / -1;">-</div></div>
+      </div>
+      <div style="margin-top: 1.5rem; text-align: right;">
+        <button id="btnEditProfile" class="btn-primary">✏️ Chỉnh Sửa Thông Tin</button>
+      </div>
+    </div>
+    
+    <!-- Đổi Mật Khẩu -->
+    <div class="profile-card">
+      <h3>🔐 Bảo Mật</h3>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <p style="margin: 0; color: var(--gray-600);">Thay đổi mật khẩu để bảo mật tài khoản của bạn</p>
+        <button id="btnChangePassword" class="btn-secondary">🔑 Đổi Mật Khẩu</button>
+      </div>
+    </div>
+    
+    <!-- Hồ Sơ Bệnh Án (Nếu là User) -->
+    <div id="patientRecordCard" class="profile-card" style="display:none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="margin: 0;">📋 Hồ Sơ Bệnh Án Của Tôi</h3>
+        <a href="patient-dashboard.html" class="btn-primary" style="text-decoration: none; display: inline-block;">
+          📊 Xem Dashboard
+        </a>
+      </div>
+      <div id="myMedicalRecords">
+        <p style="color: var(--gray-500); text-align: center;">⏳ Đang tải...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edit Profile -->
+  <div id="modalEditProfile" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>✏️ Chỉnh Sửa Thông Tin</h2>
+        <span class="modal-close">&times;</span>
+      </div>
+      <form id="formEditProfile" class="modal-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Họ Tên</label>
+            <input type="text" id="editFullName" name="full_name">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="editEmail" name="email">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Số Điện Thoại</label>
+            <input type="text" id="editPhone" name="phone">
+          </div>
+          <div class="form-group">
+            <label>Ngày Sinh</label>
+            <input type="date" id="editDOB" name="date_of_birth">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Giới Tính</label>
+            <select id="editGender" name="gender">
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Địa Chỉ</label>
+          <textarea id="editAddress" name="address" rows="3"></textarea>
+        </div>
+        
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary modal-cancel">Hủy</button>
+          <button type="submit" class="btn-primary">💾 Lưu Thay Đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Change Password -->
+  <div id="modalChangePassword" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🔑 Đổi Mật Khẩu</h2>
+        <span class="modal-close">&times;</span>
+      </div>
+      <form id="formChangePassword" class="modal-form">
+        <div class="form-group">
+          <label>Mật khẩu hiện tại <span class="required">*</span></label>
+          <input type="password" id="currentPassword" name="currentPassword" required>
+        </div>
+        
+        <div class="form-group">
+          <label>Mật khẩu mới <span class="required">*</span></label>
+          <input type="password" id="newPassword" name="newPassword" required minlength="6">
+        </div>
+        
+        <div class="form-group">
+          <label>Xác nhận mật khẩu mới <span class="required">*</span></label>
+          <input type="password" id="confirmNewPassword" name="confirmPassword" required minlength="6">
+        </div>
+        
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary modal-cancel">Hủy</button>
+          <button type="submit" class="btn-primary">✅ Đổi Mật Khẩu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getToken, getRole } from './auth.js';
+    
+    let currentUser = null;
+    
+    // Load user profile
+    async function loadProfile() {
+      try {
+        const response = await fetch('http://localhost:3000/api/users/me', {
+          headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        
+        if (!response.ok) throw new Error('Failed to load profile');
+        
+        currentUser = await response.json();
+        renderProfile();
+        
+        // Load medical records if user role
+        if (currentUser.role === 'user') {
+          loadMyMedicalRecords();
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        alert('❌ Không thể tải thông tin người dùng');
+      }
+    }
+    
+    function renderProfile() {
+      const roleEmoji = { 'admin': '👑', 'doctor': '👨‍⚕️', 'user': '👤' };
+      const roleText = { 'admin': 'Quản Trị Viên', 'doctor': 'Bác Sĩ', 'user': 'Bệnh Nhân' };
+      
+      document.getElementById('profileAvatar').textContent = roleEmoji[currentUser.role] || '👤';
+      document.getElementById('profileUsername').textContent = currentUser.username;
+      document.getElementById('profileRole').textContent = roleText[currentUser.role] || currentUser.role;
+      
+      // Format date of birth
+      const formatDate = (dateStr) => {
+        if (!dateStr) return 'Chưa cập nhật';
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      };
+      
+      document.getElementById('userInfo').innerHTML = `
+        <div class="info-item"><div class="info-label">Username</div><div class="info-value">${currentUser.username}</div></div>
+        <div class="info-item"><div class="info-label">Email</div><div class="info-value">${currentUser.email || 'Chưa cập nhật'}</div></div>
+        <div class="info-item"><div class="info-label">Số Điện Thoại</div><div class="info-value">${currentUser.phone || 'Chưa cập nhật'}</div></div>
+        <div class="info-item"><div class="info-label">Ngày Sinh</div><div class="info-value">${formatDate(currentUser.date_of_birth)}</div></div>
+        <div class="info-item"><div class="info-label">Giới Tính</div><div class="info-value">${currentUser.gender || 'Chưa cập nhật'}</div></div>
+        <div class="info-item" style="grid-column: 1 / -1;"><div class="info-label">Địa Chỉ</div><div class="info-value">${currentUser.address || 'Chưa cập nhật'}</div></div>
+      `;
+    }
+    
+    async function loadMyMedicalRecords() {
+      try {
+        document.getElementById('patientRecordCard').style.display = 'block';
+        const container = document.getElementById('myMedicalRecords');
+        container.innerHTML = '<p style="color: var(--gray-500); text-align: center;">⏳ Đang tải...</p>';
+        
+        // Lấy danh sách patients để tìm patient_id của user hiện tại
+        const patientsRes = await fetch('http://localhost:3000/api/patients', {
+          headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        
+        if (!patientsRes.ok) {
+          container.innerHTML = '<p style="color: var(--red-500); text-align: center;">❌ Không thể tải danh sách bệnh nhân</p>';
+          return;
+        }
+        
+        const patients = await patientsRes.json();
+        
+        // Tìm patient khớp với username, email hoặc phone của user
+        let myPatient = patients.find(p => 
+          p.email === currentUser.email || 
+          p.phone === currentUser.phone ||
+          p.name === currentUser.full_name
+        );
+        
+        if (!myPatient && patients.length > 0) {
+          // Nếu không tìm thấy khớp chính xác, lấy patient đầu tiên (demo)
+          myPatient = patients[0];
+        }
+        
+        if (!myPatient) {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 2rem;">
+              <p style="color: var(--gray-500); margin-bottom: 1rem;">📋 Bạn chưa có hồ sơ bệnh nhân</p>
+              <p style="color: var(--gray-400); font-size: 0.9rem;">Vui lòng liên hệ bác sĩ để tạo hồ sơ</p>
+            </div>
+          `;
+          return;
+        }
+        
+        // Load records, prescriptions, labs
+        const [recordsRes, prescriptionsRes, labsRes] = await Promise.all([
+          fetch(`http://localhost:3000/api/records?patient_id=${myPatient.id}`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+          }),
+          fetch(`http://localhost:3000/api/prescriptions?patient_id=${myPatient.id}`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+          }),
+          fetch(`http://localhost:3000/api/labs?patient_id=${myPatient.id}`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+          })
+        ]);
+        
+        const records = await recordsRes.json();
+        const prescriptions = await prescriptionsRes.json();
+        const labs = await labsRes.json();
+        
+        // Format date helper
+        const formatDate = (dateStr) => {
+          if (!dateStr) return 'N/A';
+          const date = new Date(dateStr);
+          return date.toLocaleDateString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        };
+        
+        // Render medical data
+        container.innerHTML = `
+          <div style="background: var(--gray-50); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+            <h4 style="margin: 0 0 0.5rem 0;">👤 Thông tin bệnh nhân</h4>
+            <p style="margin: 0.25rem 0;"><strong>Họ tên:</strong> ${myPatient.name}</p>
+            <p style="margin: 0.25rem 0;"><strong>Ngày sinh:</strong> ${formatDate(myPatient.dob)}</p>
+            <p style="margin: 0.25rem 0;"><strong>Giới tính:</strong> ${myPatient.gender || 'N/A'}</p>
+            <p style="margin: 0.25rem 0;"><strong>Nhóm máu:</strong> ${myPatient.blood_type || 'N/A'}</p>
+            <p style="margin: 0.25rem 0;"><strong>Điện thoại:</strong> ${myPatient.phone || 'N/A'}</p>
+          </div>
+          
+          <!-- Records -->
+          <div style="margin-bottom: 1.5rem;">
+            <h4 style="margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem;">
+              📋 Hồ sơ bệnh án 
+              <span style="background: var(--primary); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">${records.length}</span>
+            </h4>
+            ${records.length > 0 ? records.map(r => `
+              <div style="background: white; border: 1px solid var(--gray-200); padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <strong style="color: var(--primary);">Chẩn đoán:</strong>
+                  <small style="color: var(--gray-500);">${new Date(r.created_at).toLocaleDateString('vi-VN')}</small>
+                </div>
+                <p style="margin: 0.5rem 0;">${r.diagnosis}</p>
+                ${r.treatment ? `
+                  <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--gray-100);">
+                    <strong style="color: var(--secondary);">Điều trị:</strong>
+                    <p style="margin: 0.25rem 0;">${r.treatment}</p>
+                  </div>
+                ` : ''}
+                ${r.doctor_name ? `
+                  <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--gray-100);">
+                    <strong style="color: #10b981;">👨‍⚕️ Bác sĩ:</strong>
+                    <span style="color: var(--gray-700);">${r.doctor_name}</span>
+                  </div>
+                ` : ''}
+              </div>
+            `).join('') : '<p style="color: var(--gray-400); text-align: center;">Chưa có hồ sơ bệnh án</p>'}
+          </div>
+          
+          <!-- Prescriptions -->
+          <div style="margin-bottom: 1.5rem;">
+            <h4 style="margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem;">
+              💊 Đơn thuốc 
+              <span style="background: var(--secondary); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">${prescriptions.length}</span>
+            </h4>
+            ${prescriptions.length > 0 ? prescriptions.map(p => `
+              <div style="background: white; border: 1px solid var(--gray-200); padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <strong style="color: var(--secondary);">${p.medicine_name}</strong>
+                  <small style="color: var(--gray-500);">${new Date(p.created_at).toLocaleDateString('vi-VN')}</small>
+                </div>
+                <p style="margin: 0.25rem 0;"><strong>Liều lượng:</strong> ${p.dosage}</p>
+                ${p.frequency ? `<p style="margin: 0.25rem 0;"><strong>Tần suất:</strong> ${p.frequency}</p>` : ''}
+                ${p.duration ? `<p style="margin: 0.25rem 0;"><strong>Thời gian:</strong> ${p.duration}</p>` : ''}
+                ${p.instructions ? `<p style="margin: 0.25rem 0; color: var(--gray-600); font-size: 0.9rem;">${p.instructions}</p>` : ''}
+              </div>
+            `).join('') : '<p style="color: var(--gray-400); text-align: center;">Chưa có đơn thuốc</p>'}
+          </div>
+          
+          <!-- Labs -->
+          <div>
+            <h4 style="margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem;">
+              🔬 Kết quả xét nghiệm 
+              <span style="background: var(--success); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">${labs.length}</span>
+            </h4>
+            ${labs.length > 0 ? labs.map(l => `
+              <div style="background: white; border: 1px solid var(--gray-200); padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <strong style="color: var(--success);">${l.test_name}</strong>
+                  <small style="color: var(--gray-500);">${new Date(l.test_date).toLocaleDateString('vi-VN')}</small>
+                </div>
+                <p style="margin: 0.5rem 0;"><strong>Kết quả:</strong> ${l.result || 'Chưa có'}</p>
+                ${l.notes ? `<p style="margin: 0.25rem 0; color: var(--gray-600); font-size: 0.9rem;">${l.notes}</p>` : ''}
+              </div>
+            `).join('') : '<p style="color: var(--gray-400); text-align: center;">Chưa có kết quả xét nghiệm</p>'}
+          </div>
+          
+          <div style="margin-top: 2rem; text-align: center; padding: 1rem; background: var(--gray-50); border-radius: 8px;">
+            <p style="color: var(--gray-600); margin: 0; font-size: 0.9rem;">
+              ℹ️ Nếu có thắc mắc về kết quả, vui lòng liên hệ bác sĩ
+            </p>
+          </div>
+        `;
+        
+      } catch (error) {
+        console.error('Error loading medical records:', error);
+        document.getElementById('myMedicalRecords').innerHTML = 
+          '<p style="color: var(--red-500); text-align: center;">❌ Có lỗi khi tải dữ liệu</p>';
+      }
+    }
+    
+    // Modal management
+    const modalEdit = document.getElementById('modalEditProfile');
+    const modalPassword = document.getElementById('modalChangePassword');
+    const btnEdit = document.getElementById('btnEditProfile');
+    const btnPassword = document.getElementById('btnChangePassword');
+    
+    btnEdit?.addEventListener('click', () => {
+      // Populate form
+      document.getElementById('editFullName').value = currentUser.full_name || '';
+      document.getElementById('editEmail').value = currentUser.email || '';
+      document.getElementById('editPhone').value = currentUser.phone || '';
+      document.getElementById('editDOB').value = currentUser.date_of_birth || '';
+      document.getElementById('editGender').value = currentUser.gender || 'Nam';
+      document.getElementById('editAddress').value = currentUser.address || '';
+      
+      modalEdit.classList.add('show');
+    });
+    
+    btnPassword?.addEventListener('click', () => {
+      modalPassword.classList.add('show');
+    });
+    
+    document.querySelectorAll('.modal-close, .modal-cancel').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modalEdit.classList.remove('show');
+        modalPassword.classList.remove('show');
+      });
+    });
+    
+    // Form submissions
+    document.getElementById('formEditProfile').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData);
+      
+      try {
+        const response = await fetch('http://localhost:3000/api/users/me', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getToken()}`
+          },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        if (response.ok) {
+          alert('✅ ' + result.message);
+          modalEdit.classList.remove('show');
+          loadProfile();
+        } else {
+          alert('❌ ' + (result.error || 'Có lỗi xảy ra'));
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Không thể kết nối đến server');
+      }
+    });
+    
+    document.getElementById('formChangePassword').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmNewPassword').value;
+      
+      if (newPassword !== confirmPassword) {
+        alert('❌ Mật khẩu xác nhận không khớp!');
+        return;
+      }
+      
+      try {
+        const response = await fetch('http://localhost:3000/api/users/change-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getToken()}`
+          },
+          body: JSON.stringify({ currentPassword, newPassword })
+        });
+        
+        const result = await response.json();
+        if (response.ok) {
+          alert('✅ ' + result.message);
+          modalPassword.classList.remove('show');
+          e.target.reset();
+        } else {
+          alert('❌ ' + (result.error || 'Có lỗi xảy ra'));
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Không thể kết nối đến server');
+      }
+    });
+    
+    // Initial load
+    loadProfile();
+  </script>
+</body>
+</html>

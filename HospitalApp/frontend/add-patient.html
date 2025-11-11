@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thêm Bệnh Nhân Mới - Hospital Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <div class="container">
+      <!-- Header giống index.html -->
+      <header class="topbar">
+        <h1>Quản Lý Bệnh Viện</h1>
+        <div class="top-actions">
+          <nav class="navlinks">
+            <a href="index.html">🏠 Trang Chủ</a>
+            <a href="add-patient.html" class="active" id="nav-add-patient" style="display:none">➕ Thêm Hồ Sơ Bệnh Nhân</a>
+            <a href="admin-dashboard.html" id="nav-dashboard" style="display:none">📊 Dashboard</a>
+            <a href="admin-users.html" id="nav-admin" style="display:none">👥 Quản Lý Users</a>
+          </nav>
+          <div class="userbar">
+            <a href="profile.html" id="profileLink" class="btn-profile" style="display:none;">
+              <span class="icon">👤</span>
+              <span>Hồ Sơ</span>
+            </a>
+            <span id="currentUser" class="user-info">Chưa đăng nhập</span>
+            <button id="logoutBtn" class="danger" style="display:none">Đăng Xuất</button>
+          </div>
+        </div>
+      </header>
+
+  <div style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+    <!-- Header -->
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 16px; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h1 style="color: white; margin: 0 0 0.5rem 0; font-size: 2rem;">➕ Thêm Hồ Sơ Bệnh Nhân Mới</h1>
+          <p style="color: rgba(255,255,255,0.9); margin: 0;">Nhập đầy đủ thông tin bệnh nhân vào hệ thống</p>
+        </div>
+        <button onclick="window.location.href='index.html'" class="btn-icon secondary" style="background: white; color: #667eea;">
+          ← Quay Lại
+        </button>
+      </div>
+    </div>
+
+    <!-- Form Container -->
+    <div style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+      <form id="createForm" class="modern-form">
+        
+        <!-- Section 1: Thông Tin Cơ Bản -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+              📋 Thông Tin Cơ Bản
+            </span>
+          </h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Họ và Tên <span class="required">*</span></label>
+              <input id="name" name="name" placeholder="Nguyễn Văn A" required />
+            </div>
+            <div class="form-group">
+              <label for="dob">Ngày Sinh <span class="required">*</span></label>
+              <input id="dob" name="dob" type="date" required />
+            </div>
+            <div class="form-group">
+              <label for="gender">Giới Tính</label>
+              <select id="gender" name="gender">
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+                <option value="Khác">Khác</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Số Điện Thoại <span class="required">*</span></label>
+              <input id="phone" name="phone" type="tel" placeholder="0912 345 678" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="example@email.com" />
+            </div>
+            <div class="form-group">
+              <label for="idCard">CCCD/CMND</label>
+              <input id="idCard" name="id_card" placeholder="001234567890" maxlength="12" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Địa Chỉ Thường Trú</label>
+            <input id="address" name="address" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố" />
+          </div>
+        </div>
+
+        <!-- Section 2: Thông Tin Y Tế -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <span style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+              🩺 Thông Tin Y Tế
+            </span>
+          </h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bloodType">Nhóm Máu</label>
+              <select id="bloodType" name="blood_type">
+                <option value="">-- Chọn nhóm máu --</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="AB">AB</option>
+                <option value="O">O</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="occupation">Nghề Nghiệp</label>
+              <input id="occupation" name="occupation" placeholder="Giáo viên, kỹ sư, bác sĩ..." />
+            </div>
+            <div class="form-group">
+              <label for="maritalStatus">Tình Trạng Hôn Nhân</label>
+              <select id="maritalStatus" name="marital_status">
+                <option value="">-- Chọn --</option>
+                <option value="Độc thân">Độc thân</option>
+                <option value="Đã kết hôn">Đã kết hôn</option>
+                <option value="Ly hôn">Ly hôn</option>
+                <option value="Góa">Góa</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="allergies">Dị Ứng Thuốc/Thực Phẩm</label>
+            <textarea id="allergies" name="allergies" rows="2" placeholder="VD: Penicillin, hải sản, phấn hoa, latex..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="medicalHistory">Tiền Sử Bệnh</label>
+            <textarea id="medicalHistory" name="medical_history" rows="2" placeholder="VD: Tiểu đường, cao huyết áp, hen suyễn, bệnh tim..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="currentMedications">Thuốc Đang Sử Dụng</label>
+            <textarea id="currentMedications" name="current_medications" rows="2" placeholder="Liệt kê các loại thuốc đang dùng thường xuyên và liều lượng..."></textarea>
+          </div>
+        </div>
+
+        <!-- Section 3: Liên Hệ Khẩn Cấp -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <span style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+              🚨 Liên Hệ Khẩn Cấp
+            </span>
+          </h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="emergencyContact">Tên Người Liên Hệ</label>
+              <input id="emergencyContact" name="emergency_contact_name" placeholder="Họ tên người thân" />
+            </div>
+            <div class="form-group">
+              <label for="emergencyPhone">Số Điện Thoại</label>
+              <input id="emergencyPhone" name="emergency_contact_phone" type="tel" placeholder="0987 654 321" />
+            </div>
+            <div class="form-group">
+              <label for="emergencyRelation">Mối Quan Hệ</label>
+              <input id="emergencyRelation" name="emergency_contact_relation" placeholder="Vợ/chồng, con, anh/chị/em..." />
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Bảo Hiểm Y Tế -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <span style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+              💳 Bảo Hiểm Y Tế
+            </span>
+          </h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="insuranceProvider">Đơn Vị Bảo Hiểm</label>
+              <input id="insuranceProvider" name="insurance_provider" placeholder="BHYT, Bảo Việt, Prudential..." />
+            </div>
+            <div class="form-group">
+              <label for="insuranceNumber">Số Thẻ BHYT</label>
+              <input id="insuranceNumber" name="insurance_policy_number" placeholder="HS1234567890123" maxlength="15" />
+            </div>
+            <div class="form-group">
+              <label for="insuranceExpiry">Ngày Hết Hạn</label>
+              <input id="insuranceExpiry" name="insurance_expiry_date" type="date" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 5: Ghi Chú -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <span style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+              📝 Ghi Chú Bổ Sung
+            </span>
+          </h3>
+          
+          <div class="form-group">
+            <label for="notes">Thông Tin Khác</label>
+            <textarea id="notes" name="notes" rows="3" placeholder="Các thông tin bổ sung khác về bệnh nhân..."></textarea>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+          <button type="button" onclick="window.location.href='index.html'" class="btn-submit secondary">
+            ❌ Hủy Bỏ
+          </button>
+          <button type="submit" class="btn-submit success">
+            ✅ Thêm Bệnh Nhân Vào Hệ Thống
+          </button>
+        </div>
+      </form>
+      
+      <div id="createResult" class="result-message"></div>
+    </div>
+  </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getToken, getRole, clearAuth } from './auth.js';
+    import { createPatient } from './api.js';
+
+    // Check authentication
+    const token = getToken();
+    const role = getRole();
+    
+    if (!token) {
+      window.location.href = 'login.html';
+    }
+
+    // Check authorization (only admin and doctor can add patients)
+    if (role !== 'admin' && role !== 'doctor') {
+      alert('⚠️ Bạn không có quyền thêm bệnh nhân!');
+      window.location.href = 'index.html';
+    }
+
+    // Display user info
+    const currentUser = document.getElementById('currentUser');
+    if (currentUser) {
+      const roleText = {
+        'admin': '🔑 Quản trị viên',
+        'doctor': '👨‍⚕️ Bác sĩ',
+        'user': '👤 Bệnh nhân'
+      };
+      currentUser.textContent = roleText[role] || 'Người dùng';
+    }
+
+    // Show profile link
+    const profileLink = document.getElementById('profileLink');
+    if (profileLink) profileLink.style.display = 'inline-block';
+
+    // Logout handler
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.style.display = 'inline-block';
+      logoutBtn.addEventListener('click', () => {
+        if (confirm('Bạn có chắc muốn đăng xuất?')) {
+          clearAuth();
+          window.location.href = 'login.html';
+        }
+      });
+    }
+
+    // Form submission
+    const form = document.getElementById('createForm');
+    const resultDiv = document.getElementById('createResult');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const payload = {};
+      
+      // Convert FormData to object
+      for (let [key, value] of formData.entries()) {
+        if (value && value.trim() !== '') {
+          payload[key] = value.trim();
+        }
+      }
+
+      try {
+        resultDiv.innerHTML = '<p style="color: #3b82f6;">⏳ Đang xử lý...</p>';
+        
+        const result = await createPatient(payload);
+        
+        if (result.error) {
+          resultDiv.innerHTML = `<p style="color: #ef4444;">❌ ${result.error}</p>`;
+        } else {
+          resultDiv.innerHTML = '<p style="color: #10b981;">✅ Thêm bệnh nhân thành công!</p>';
+          form.reset();
+          
+          // Redirect after 2 seconds
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 2000);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        resultDiv.innerHTML = '<p style="color: #ef4444;">❌ Lỗi khi thêm bệnh nhân</p>';
+      }
+    });
+    
+    // Update UI based on role
+    const navAddPatient = document.getElementById('nav-add-patient');
+    const navAdmin = document.getElementById('nav-admin');
+    const navDashboard = document.getElementById('nav-dashboard');
+    
+    if (role === 'admin' || role === 'doctor') {
+      if (navAddPatient) navAddPatient.style.display = 'inline-block';
+      if (role === 'admin') {
+        if (navAdmin) navAdmin.style.display = 'inline-block';
+        if (navDashboard) navDashboard.style.display = 'inline-block';
+      }
+    }
+  </script>
+</body>
+</html>
+
