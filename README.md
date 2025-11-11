@@ -62,50 +62,59 @@ Hệ thống quản lý bệnh án điện tử là một ứng dụng web toàn
 
 ## 🚀 3. Một số hình ảnh hệ thống
 
-### 🔐 Đăng nhập & Xác thực
-- Trang đăng nhập với JWT authentication
-- Trang đăng ký tài khoản mới
-- Quên mật khẩu và reset password
+### Trang chủ
 
 <p align="center">
-  <img src="docs/Server.png" alt="Server" width="600"/>
+  <img src="docs/Home.png" alt="Server" width="600"/>
 </p>
 
-### 👥 Quản lý người dùng (Admin)
-- Danh sách toàn bộ users (Admin/Doctor/Patient)
-- Thêm, sửa, xóa người dùng
-- Role-based badges và timestamps
+### Đăng nhập
 
 <p align="center">
-  <img src="docs/Server.png" alt="Server" width="600"/>
+  <img src="docs/Login.png" alt="Server" width="600"/>
 </p>
 
-### 🏥 Quản lý bệnh nhân
-- Danh sách bệnh nhân với tìm kiếm realtime
-- Form thêm bệnh nhân (18+ trường thông tin)
-- Chi tiết bệnh nhân với records, prescriptions, labs
+### Đăng ký
 
 <p align="center">
-  <img src="docs/Server.png" alt="Server" width="600"/>
+  <img src="docs/Resgiter.png" alt="Server" width="600"/>
 </p>
 
-### 📊 Dashboard Analytics
-- Biểu đồ phân bố giới tính (Doughnut chart)
-- Biểu đồ nhóm máu (Pie chart)
-- Biểu đồ độ tuổi (Bar chart - 5 khoảng)
-- Biểu đồ hoạt động y tế (Bar chart)
+### Quản lý người dùng 
 
 <p align="center">
-  <img src="docs/Server.png" alt="Server" width="600"/>
+  <img src="docs/User.png" alt="Server" width="600"/>
 </p>
 
-### 👤 Profile & Settings
-- Xem và chỉnh sửa thông tin cá nhân
-- Đổi mật khẩu
-- Bệnh nhân xem hồ sơ bệnh án của mình
+### Thêm hồ sơ bệnh nhân
 
 <p align="center">
-  <img src="docs/Server.png" alt="Server" width="600"/>
+  <img src="docs/Hoso.png" alt="Server" width="600"/>
+</p>
+
+### Dashboard Analytics
+
+<p align="center">
+  <img src="docs/Dashboard.png" alt="Server" width="600"/>
+</p>
+
+### Profile & Settings
+1. Admin
+
+<p align="center">
+  <img src="docs/Admin.png" alt="Server" width="600"/>
+</p>
+
+2. Doctor
+
+<p align="center">
+  <img src="docs/Doctor.png" alt="Server" width="600"/>
+</p>
+
+3. Patients
+
+<p align="center">
+  <img src="docs/Patien.png" alt="Server" width="600"/>
 </p>
 
 ---
