@@ -4,7 +4,7 @@
     </a>
 </h2>
 <h2 align="center">
-   TRUYỀN FILE QUA TCP
+   XÂY DỰNG HỆ THỐNG QUẢN LÝ BỆNH ÁN ĐIỆN TỬ
 </h2>
 <div align="center">
     <p align="center">
