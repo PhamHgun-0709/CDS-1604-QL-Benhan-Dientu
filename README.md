@@ -20,3 +20,29 @@
 </div>
 
 ---
+
+## 📖 1. Giới thiệu
+
+---
+
+## 🛠️ 2. Công nghệ sử dụng  
+
+---
+
+## 🚀 3. Một số hình ảnh hệ thống
+
+---
+
+## 📝 4. Các bước cài đặt
+
+---
+
+## 📌 5. Liên hệ cá nhân
+Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ:
+
+- Họ và tên: Phạm Thành Hưng
+- Lớp: CNTT 16-04
+- Khoa: Công nghệ thông tin - Trường Đại học Đại Nam
+- Email: pthung0709@gmail.com
+
+© 2025 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
